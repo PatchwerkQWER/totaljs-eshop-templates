@@ -1,0 +1,7 @@
+<ul class="dropdown" aria-label="submenu">
+	@{foreach a in F.global.categories}
+		@{if !a.level && a.count}
+		<li><a href="@{sitemap_url('category')}@{a.linker}/">@{a.text}</a></li>
+		@{fi}
+	@{end}
+</ul>

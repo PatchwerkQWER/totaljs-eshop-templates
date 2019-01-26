@@ -1,0 +1,25 @@
+<div class="text-divider"><span>@{title}</span></div>
+
+@{if model.count}
+	<div class="row">
+		<div class="col-md-12 hidden-sm hidden-xs is-centered">
+			<a href="@{sitemap_url('posts')}" class="notice-nav"><i class="fa fa-caret-right"></i>@(Read blog)</a>
+			<a href="@{sitemap_url('category')}" class="notice-nav"><i class="fa fa-caret-right"></i>@(Browse products)</a>
+		</div>
+		<div class="col-md-6">
+			@{foreach m in model.items}
+				<div class="notice@{if m.ispinned} is-pinned@{fi}">
+					<div class="notice-head">
+						<h2>@{m.name}</h2>
+						<div class="notice-date"><i class="fa fa-clock-o"></i>@{m.date.format('@(yyyy-MM-dd)')}</div>
+					</div>
+					<div class="notice-body">
+						@{!m.body}
+					</div>
+				</div>
+			@{end}
+		</div>
+	</div>
+@{else}
+	<div class="empty is-centered"><i class="fa fa-search"></i>@(No notices in database.)</div>
+@{fi}

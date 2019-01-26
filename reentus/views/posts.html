@@ -1,0 +1,25 @@
+<div class="text-divider"><span>@{title}</span></div>
+
+@{if model.count}
+	<div class="row">
+	@{foreach m in model.items}
+		<div class="col-md-4">
+
+			<div class="thumbnail post">
+				<a href="@{sitemap_url('post', m.linker)}" title="@{m.name}">
+					<img src="@{m.pictures[0]}" alt="@{m.name}">
+					<div class="caption">
+						<p class="post-date"><i class="fa fa-calendar"></i>@{m.date.format('@(yyyy-MM-dd)')}</p>
+						<h3 class="post-title">@{m.name}</h3>
+						<p class="post-text">@{m.description}</p>
+					</div>
+				</a>
+			</div>
+
+		</div>
+	@{end}
+	</div>
+	@{view('/partials/pagination', model)}
+@{else}
+	<div class="empty is-centered"><i class="fa fa-search"></i>@(No posts in database.)</div>
+@{fi}

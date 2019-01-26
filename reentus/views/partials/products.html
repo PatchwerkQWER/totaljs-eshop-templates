@@ -1,0 +1,23 @@
+<div class="row has-margin-top1">
+@{foreach m in model.items}
+	<div class="col-md-3">
+		<div class="thumbnail product" data-new="@{m.pricemin}" data-old="@{m.priceold}" data-currency="@{global.config.currency_entity}">
+			<a href="@{m.linker}">
+				<h3>@{m.name}</h3>
+				<div class="product-tags-holder">
+					<div class="product-tags">
+						<div class="product-tag-issale">0</div>
+						@{if m.isnew}<div class="product-tag-isnew">New</div>@{fi}
+						@{if m.istop}<div class="product-tag-istop">Top</div>@{fi}
+					</div>
+				</div>
+				<img src="/images/small/@{m.pictures[0]}.jpg" alt="@{m.name}">
+				<div class="caption">
+					<p class="product-price">@{!m.pricemin.currency()}@{if m.priceold && m.priceold > m.pricemin}<span class="product-priceold">@{!m.priceold.currency()}</span>@{fi}</p>
+					@{if !m.stock}<span class="product-outofstock">Out of stock</span>@{fi}
+				</div>
+			</a>
+		</div>
+	</div>
+@{end}
+</div>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=10" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="robots" content="all,follow" />
+	<link rel="stylesheet" href="//cdn.componentator.com/spa.min@14.css" />
+	<link rel="stylesheet" href="@{global.css}" />
+	<script src="//cdn.componentator.com/spa.min@14.js"></script>
+	@{import('meta', 'head', 'default.css', 'default.js', 'favicon.ico')}
+</head>
+<body data-jc="exec,binder,modificator">
+	<div data-jc="loading" class="ui-loading@{if !repository.loading} hidden@{fi}"></div>
+	<div data-jc="shoppingcart" data-jc-path="shoppingcart" data-jc-config="discount:@{if user}@{user.discount}@{else}0@{fi}"></div>
+	<div data-jc="message" data-jc-config="button:@(Close)"></div>
+	<div data-jc="autocomplete"></div>
+
+	<div class="container">
+		<div class="clearfix">
+			<nav class="top-navbar">
+				<ul>
+					@{if user}
+					<li><a href="@{sitemap_url('account')}" class="has-text-bold">@{user.name}</a></li>
+					<li><a href="@{sitemap_url('settings')}"><i class="fa fa-cog"></i>@(Settings)</a></li>
+					<li><a href="@{sitemap_url('logoff')}"><i class="fa fa-sign-out"></i>@(Sign out)</a></li>
+					@{else}
+					<li><a href="@{sitemap_url('account')}">My account</a></li>
+					@{fi}
+					<li><a href="@{sitemap_url('checkout')}">Cart</a></li>
+					<li><a href="@{sitemap_url('category')}?f=true"><i class="fa fa-search"></i></a></li>
+				</ul>
+			</nav>
+		</div>
+
+		<div class="header">
+			<div>
+				<a href="/">
+					<h1 class="title is-centered">Reentus theme</h1>
+					<h2 class="subtitle is-centered">Total.js free eshop template</h2>
+				</a>
+			</div>
+			<div class="header-cart-container">
+				<a href="@{sitemap_url('checkout')}" class="header-cart shoppingcart" data-m="shoppingcart.sum + shoppingcart">
+					<div>
+						<p class="header-cart-items">Items <span class="header-cart-items-count"  data-b="shoppingcart.count" data-b-html="'({0})'.format(value)">(0)</span></p>
+						<p class="header-cart-price" data-b="shoppingcart.sum" data-b-html="'@{global.config.currency_entity}'.format(value ? value.format(2) : (0).format(2))">199.44€</p>
+					</div>
+					<div class="header-cart-icon">
+						<i class="fa fa-shopping-cart"></i>
+					</div>
+				</a>
+			</div>
+		</div>
+
+		<div class="page-navbar">
+			<nav class="page-navbar-holder" role="navigation">
+				<button class="page-navbar-toggle visible-xs"><i class="fa fa-bars"></i> Menu</button>
+				<ul class="page-navbar-items hidden-xs">
+					<li><a href="@{sitemap_url('new')}">@(New goods)</a></li>
+					<li><a href="@{sitemap_url('top')}">@(Top products)</a></li>
+					<li><a href="@{sitemap_url('popular')}">@(Popular products)</a></li>
+					<li><a href="@{sitemap_url('category')}">@(All products)</a></li>
+					<li>
+						<a href="@{sitemap_url('category')}" aria-haspopup="true">@(Categories)</a>
+						@{view('partials/categories')}
+					</li>
+					@{foreach main in F.global.navigations.panel.children}
+						<li>
+							<a href="@{main.url}" @{if main.children.length} aria-haspopup="true"@{fi}>@{main.name}</a>
+							@{if main.children.length}
+								<ul class="dropdown" aria-label="submenu">
+								@{foreach second in main.children}
+									<li><a href="@{second.url}">@{second.name}</a></li>
+								@{end}
+								</ul>
+							@{fi}
+						</li>
+					@{end}
+				</ul>
+			</nav>
+		</div>
+
+		<div class="body">
+			<nav class="breadcrumb">
+				@{foreach m in sitemap()}
+					@{if m.id === 'category'}
+						@{if index}
+						<i class="fa fa-angle-right"></i>
+						@{fi}
+						<a href="@{m.url}" @{if index === sitemap().length - 1} class="has-text-highlighted"@{fi}> @{m.name}</a>
+					@{else}
+						@{if index}
+						<i class="fa fa-angle-right"></i>
+						@{fi}
+						<a href="@{m.url}" @{if index === sitemap().length - 1} class="has-text-highlighted"@{fi}>@{m.name}</a>
+					@{fi}
+				@{end}
+			</nav>
+
+			@{body}
+		</div>
+
+		<footer class="page-footer">
+			<p>
+				Powered by <a href="https://totaljs.com">Total.js Eshop and Total.js Platform</a>
+			</p>
+		</footer>
+	</div>
+
+	<script src="@{global.js}"></script>
+
+</body>
+</html>

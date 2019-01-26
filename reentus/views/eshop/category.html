@@ -1,0 +1,10 @@
+<div class="text-divider"><span>@{title}</span></div>
+
+@{view('~/partials/filter')}
+@{if model.count}
+	@{view('~/partials/products', model)}
+@{else}
+	<br />
+	<div class="empty"><i class="fa fa-search"></i>@(No products in database.)</div>
+@{fi}
+@{view('~/partials/pagination', model)}

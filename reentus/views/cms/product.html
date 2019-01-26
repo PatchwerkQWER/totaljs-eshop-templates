@@ -1,0 +1,151 @@
+@{if repository.preview}
+	<br />
+	<div id="CMS">
+		@{if repository.page && repository.page.body}
+			<!-- RENDER UPDATED CONTENT -->
+			@{!repository.page.body}
+		@{else}
+			<!-- DEFAULT CONTENT FOR NEW PAGES FO THIS TEMPLATE -->
+			<div class="CMS_widgets" data-cms-category="Content,Columns"></div>
+		@{fi}
+	</div>
+@{else}
+	<br />
+	<div class="row">
+		<div class="col-md-6">
+			@{if model.pictures && model.pictures.length}
+			<div data-jc="gallery" class="ui-gallery">
+				<img src="/images/large/@{model.pictures[0]}.jpg" alt="@{model.name}" border="0" />
+				@{foreach m in model.pictures}
+					<img src="/images/small/@{m}.jpg" border="0" alt="@{model.name} @{index}" />
+				@{end}
+			</div>
+			@{fi}
+		</div>
+		<div class="col-md-6">
+
+			<h1 class="detail-title">@{title}</h1>
+
+			<div class="detail-tags">
+				@{if model.isnew}<span class="detail-tag-isnew">New</span>@{fi}
+				@{if model.istop}<span class="detail-tag-istop">Top</span>@{fi}
+			</div>
+
+			<p class="detail-description">@{model.description}</p>
+
+			<hr class="detail-hr">
+
+			<div class="row detail-info">
+				<div class="col-md-6">
+					<div>
+						<div class="key">@(Category)</div>
+						<div class="value"><a href="@{sitemap_url('category')}@{model.category.linker}/">@{model.category.text}</a></div>
+					</div>
+				</div>
+				@{if model.manufacturer}
+				<div class="col-md-6">
+					<div>
+						<div class="key">@(Manufacturer)</div>
+						<div class="value"><a href="@{sitemap_url('category')}?manufacturer=@{model.manufacturer.linker}">@{model.manufacturer.name}</a></div>
+					</div>
+				</div>
+				@{fi}
+				@{if model.availability}
+				<div class="col-md-6">
+					<div>
+						<div class="key"><i class="fa fa-truck"></i>@(Availability)</div>
+						<div class="value">@{model.availability}</div>
+					</div>
+				</div>
+				@{fi}
+				<div class="col-md-6">
+					<div>
+						<div class="key"><i class="fa fa-box-open"></i>@(In stock)</div>
+						<div class="value">@{model.stock}x</div>
+					</div>
+				</div>
+				@{if model.reference}
+				<div class="col-md-6">
+					<div>
+						<div class="key">@(Reference)</div>
+						<div class="value">@{model.reference}</div>
+					</div>
+				</div>
+				@{fi}
+				<div class="col-md-6">
+					<div>
+						<div class="key">@(Created)</div>
+						<div class="value">@{model.datecreated.format('@(yyyy-MM-dd)')}</div>
+					</div>
+				</div>
+				@{if model.size && model.size.length}
+				<div class="col-md-6">
+					<div>
+						<div class="key">@(Sizes)</div>
+						<div class="value">@{model.size.join(', ')}</div>
+					</div>
+				</div>
+				@{fi}
+				@{if model.color && model.color.length}
+				<div class="col-md-6">
+					<div>
+						<div class="key">@(Colors)</div>
+						<div class="value">@{model.color.join(', ')}</div>
+					</div>
+				</div>
+				@{fi}
+			</div>
+
+			<hr class="detail-hr">
+
+			<h2 class="detail-product detail-price" data-new="@{model.pricemin}" data-currency="@{global.config.currency_entity}">
+				@{!model.prices[0].price.currency()}@{if model.priceold}<span class="detail-priceold">@{!model.priceold.currency()}</span>@{fi}
+			</h2>
+		@{if model.prices.length > 1}
+			<table class="table table-bordered detail-prices">
+				<thead>
+					<tr>
+						<th>@(Variant name)</th>
+						<th>@(Stock)</th>
+						<th>@(Price)</th>
+					</tr>
+				</thead>
+				<tbody>
+				@{foreach m in model.prices}
+					<tr>
+						<td>@{m.name || model.name}</td>
+						<td class="detail-prices-stock">@{m.stock}x</td>
+						<td>
+							@{if m.stock}
+							<button class="detail-product detail-buy addcart" data-id="@{model.id}" data-name="@{model.name}" data-idvariant="@{m.id}" data-variant="@{m.name}" data-price="@{m.price}" data-new="@{m.price}" data-currency="@{global.config.currency_entity}"><i class="fa fa-shopping-cart"></i>@(Buy: ) <b>@{!m.price.currency()}</b></button>
+							@{else}
+							<div class="detail-outofstock"><i class="fa fa-warning"></i> @(Out of stock)</div>
+							@{fi}
+						</td>
+					</tr>
+				@{end}
+				</tbody>
+			</table>
+		@{else}
+			<h3 class="detail-stock">
+				@{model.stock}x In stock
+			</h3>
+			<div class="detail-buy-holder">
+				<button class="detail-product detail-buy addcart" data-id="@{model.id}" data-name="@{model.name}" data-idvariant="@{model.prices[0].id}" data-variant="@{model.prices[0].name}" data-price="@{model.prices[0].price}" data-new="@{model.pricemin}" data-currency="@{global.config.currency_entity}"><i class="fa fa-shopping-cart"></i>@(Buy: ) <b>@{!model.prices[0].price.currency()}</b></button>
+			</div>
+		@{fi}
+		</div>
+	</div>
+
+	@{if model.body}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="content">
+				<br />
+				@{!model.body}
+			</div>
+		</div>
+		<br />
+	</div>
+	@{fi}
+@{fi}

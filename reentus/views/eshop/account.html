@@ -1,0 +1,72 @@
+@{repository.loading = true}
+
+<div class="text-divider"><span><i class="fa fa-user"></i>@{title}</span></div>
+
+<div class="row">
+
+	<div class="col-md-4">
+		<div class="content account-info">
+
+			<div>
+				<div class="key">@(Account name)</div>
+				<div class="value">@{user.name}</div>
+			</div>
+
+			<div>
+				<div class="key">@(Email address)</div>
+				<div class="value">@{user.email}</div>
+			</div>
+
+			<div>
+				<div class="key">@(Phone number)</div>
+				<div class="value">@{if user.phone}@{user.phone}@{else}@(undefined)@{fi}</div>
+			</div>
+
+			<div>
+				<div class="key">@(Discount)</div>
+				<div class="value">@{user.discount.format(2)}%</div>
+			</div>
+			<br />
+
+			<div class="account-navbar">
+				<a href="@{sitemap_url('settings')}" class="link"><i class="fa fa-caret-right"></i>@(Update account)</a>
+				<a href="@{sitemap_url('category')}" class="link"><i class="fa fa-caret-right"></i>@(Browse goods)</a>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="col-md-8 has-xs-margin-top1">
+		<div class="content account-orders">
+			<div class="caption">
+				@(My orders) (<b data-b="orders" data-b-html="value ? value.length : 0"></b>)
+			</div>
+			<div data-b="orders" data-b-visible="!value || !value.length" class="hidden">
+				<div class="empty"><i class="fa fa-dropbox"></i>@(You don't have any orders.)</div>
+			</div>
+			<div data-b="orders" data-b-template="true" class="hidden" data-b-visible="value && value.length">
+				<script type="text/html">
+					{{ foreach m in value }}
+						<div class="orders">
+							<a href="@{sitemap_url('order', '{{ m.id }}')}" title="@(Preview)"><i class="fa fa-search"></i></a>
+							<div class="line">
+								<div class="price">{{ m.price | format(2) }}</div>
+								<div class="name">{{ m.name }}</div>
+							</div>
+							<div class="line">
+								<div class="date">{{ m.datecreated | format('@(yyyy-MM-dd HH:mm)') }}</div>
+								<div class="status">{{ if m.isfinished }}<b class="has-text-highlighted"><i class="fa fa-check-circle"></i>@(Finished)</b>{{ else }}{{ m.status }}{{ fi }}</div>
+							</div>
+						</div>
+					{{ end }}
+				</script>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script>
+	SETTER(true, 'loading', 'hide', 1000);
+	AJAXCACHE('GET /api/account/orders/', 'orders', '1 minute');
+</script>
